@@ -20,9 +20,6 @@ node {
      stage ('Email Notification'){
          mail bcc: '', body: 'Thanks', cc: '', from: '', replyTo: '', subject: 'Jenkinsjob Successful', to: 'alok.natheee@gmail.com'
      }
-    stage ('Build Status'){
-        addEmbeddableBadgeConfiguration(id: <string>, subject: <string>, status: <string>, color: <string>, animatedOverlayColor: <string>, link: <string>)
-     }
 }
   
   
