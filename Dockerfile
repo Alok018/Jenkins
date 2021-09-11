@@ -41,8 +41,9 @@ RUN apt-get update && \
 RUN mkdir ros_catkin_ws && \
     cd ros_catkin_ws && \
     rosinstall_generator ${ROS_PKG} vision_msgs --rosdistro ${ROS_DISTRO} --deps --tar > ${ROS_DISTRO}-${ROS_PKG}.rosinstall && \
-    mkdir src && git clone https://github.com/Alok018/iai_ringlight.git \
-    vcs import --input ${ROS_DISTRO}-${ROS_PKG}.rosinstall ./src && \
+    mkdir src && \
+    cd src && \
+    git clone https://github.com/Alok018/iai_ringlight.git && \
     apt-get update && \
     rosdep install --from-paths ./src --ignore-packages-from-source --rosdistro ${ROS_DISTRO} -y && \
     python3 ./src/catkin/bin/catkin_make_isolated --install --install-space ${ROS_ROOT} -DCMAKE_BUILD_TYPE=Release && \
