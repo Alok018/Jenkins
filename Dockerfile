@@ -8,7 +8,6 @@ ENV ROS_PYTHON_VERSION=3
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-WORKDIR /workspace
 
 # add the ROS deb repo to the apt sources list
 RUN apt-get update && \
@@ -38,18 +37,27 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # download/build the ROS source
-RUN mkdir ros_catkin_ws && \
-    cd ros_catkin_ws && \
-    mkdir src && \
-    cd src && \
-    source /opt/ros/${ROS_DISTRO}/setup.bash && \
-    apt-get update && \
-    git clone https://github.com/Alok018/iai_ringlight.git && \
-    cd .. && \
-    rosdep install -y --from-paths . --ignore-src --rosdistro ${ROS_DISTRO} && \
-    catkin_make && \
-    rm -rf /var/lib/apt/lists/*
+ENV CATKIN_WS=/root/catkin_ws
+RUN mkdir -p $CATKIN_WS/src
+WORKDIR $CATKIN_WS/src
 
-RUN echo 'source ${ROS_ROOT}/setup.bash' >> /root/.bashrc
-WORKDIR /
+# Initialize local catkin workspace
+RUN source /opt/ros/${ROS_DISTRO}/setup.bash \
+    # Update apt-get because its cache is always cleared after installs to keep image size down
+    && apt-get update \
+    # ROS File Server
+    && git clone https://github.com/Alok018/iai_ringlight.git \
+    # Install dependencies
+    && cd $CATKIN_WS \
+    && rosdep install -y --from-paths . --ignore-src --rosdistro ${ROS_DISTRO} \
+    # Build catkin workspace
+    && catkin_make
+
+RUN echo "source /ros_catkin_entrypoint.sh" >> /root/.bashrc
+
+COPY ./ros_catkin_entrypoint.sh /
+RUN chmod +x /ros_catkin_entrypoint.sh
+
+ENTRYPOINT ["/ros_catkin_entrypoint.sh"]
+CMD ["bash"]
 
