@@ -42,16 +42,16 @@ RUN mkdir -p $CATKIN_WS/src
 WORKDIR $CATKIN_WS/src
 
 # Initialize local catkin workspace
-RUN source /opt/ros/${ROS_DISTRO}/setup.bash \
+RUN source /opt/ros/${ROS_DISTRO}/setup.bash && \
     # Update apt-get because its cache is always cleared after installs to keep image size down
-    && apt-get update \
+    apt-get update && \
     # ROS File Server
-    && git clone https://github.com/Alok018/iai_ringlight.git \
+    git clone https://github.com/Alok018/iai_ringlight.git && \
     # Install dependencies
-    && cd $CATKIN_WS \
-    && rosdep install -y --from-paths . --ignore-src --rosdistro ${ROS_DISTRO} \
+    cd $CATKIN_WS && \
+    rosdep install -y --from-paths . --ignore-src --rosdistro ${ROS_DISTRO} && \
     # Build catkin workspace
-    && catkin_make
+    catkin_make && \
 
 RUN echo "source /ros_catkin_entrypoint.sh" >> /root/.bashrc
 
