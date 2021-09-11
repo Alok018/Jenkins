@@ -42,6 +42,7 @@ RUN mkdir ros_catkin_ws && \
     cd ros_catkin_ws && \
     rosinstall_generator ${ROS_PKG} vision_msgs --rosdistro ${ROS_DISTRO} --deps --tar > ${ROS_DISTRO}-${ROS_PKG}.rosinstall && \
     mkdir src && \
+    cd src && \
     git clone https://github.com/Alok018/iai_ringlight.git && \
     vcs import --input ${ROS_DISTRO}-${ROS_PKG}.rosinstall ./src && \
     apt-get update && \
