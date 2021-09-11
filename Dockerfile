@@ -42,6 +42,7 @@ RUN mkdir ros_catkin_ws && \
     cd ros_catkin_ws && \
     mkdir src && \
     cd src && \
+    source /opt/ros/${ROS_DISTRO}/setup.bash && \
     apt-get update && \
     git clone https://github.com/Alok018/iai_ringlight.git && \
     cd .. && \
