@@ -42,7 +42,7 @@ RUN mkdir -p $CATKIN_WS/src
 WORKDIR $CATKIN_WS/src
 
 # Initialize local catkin workspace
-RUN source /opt/ros/${ROS_DISTRO}/setup.bash && \
+RUN source /opt/ros/${ROS_DISTRO}/setup.bash \
     # Update apt-get because its cache is always cleared after installs to keep image size down
     apt-get update && \
     # ROS File Server
